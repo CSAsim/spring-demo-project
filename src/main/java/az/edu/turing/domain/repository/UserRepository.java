@@ -2,6 +2,7 @@ package az.edu.turing.domain.repository;
 
 import az.edu.turing.domain.entity.UserEntity;
 import az.edu.turing.mapper.UserRowMapper;
+import az.edu.turing.model.enums.UserStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -50,7 +51,7 @@ public class UserRepository {
 //            deleteById(userEntity.getId());
         }
 //        USERS.add(userEntity);
-        return userEntity;
+        return finByUsername(userEntity.getUsername()).get();
     }
 
     public Optional<UserEntity> finByUsername(String username) {
@@ -75,6 +76,6 @@ public class UserRepository {
                 UPDATE user_table SET status = ?
                 WHERE id = ?;
                 """;
-        jdbcTemplate.update(queryDelete, id);
+        jdbcTemplate.update(queryDelete, UserStatus.DELETED, id);
     }
 }
