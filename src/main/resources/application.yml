@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: spring-turing-experience
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/user-management
+    username: root
+    password: root2004
+server:
+  port: 8080
