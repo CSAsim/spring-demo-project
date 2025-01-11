@@ -80,12 +80,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<GlobalErrorResponse> handleConstraintViolationException(ConstraintViolationException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(GlobalErrorResponse.builder()
-                                .errorCode(ErrorCode.BAD_REQUEST)
-                                .errorMessage(e.getMessage())
-                                .timeStamp(LocalDateTime.now())
-                                .requestId(UUID.randomUUID())
-                                .build()
-                        );
+                .body(GlobalErrorResponse.builder()
+                        .errorCode(ErrorCode.BAD_REQUEST)
+                        .errorMessage(e.getMessage())
+                        .timeStamp(LocalDateTime.now())
+                        .requestId(UUID.randomUUID())
+                        .build()
+                );
     }
 }

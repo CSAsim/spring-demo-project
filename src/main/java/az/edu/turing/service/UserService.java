@@ -74,13 +74,13 @@ public class UserService {
     }
 
     private void existsById(long id) {
-        if(!userRepository.existsById(id)) {
+        if (!userRepository.existsById(id)) {
             throw new NotFoundException("There is not user with id " + id);
         }
     }
 
     private void existsByUserName(String username) {
-        if(userRepository.existsByUsername(username)) {
+        if (userRepository.existsByUsername(username)) {
             throw new AlreadyExistsException("user already exists with this username " + username);
         }
     }
