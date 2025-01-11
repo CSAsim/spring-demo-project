@@ -41,12 +41,14 @@ public class UserRepository {
         } else {
             String queryUpdate = """
                     UPDATE user_table SET username = ?,
-                    password = ?
+                    password = ?,
+                    status = ?
                     WHERE id = ?;
                     """;
             jdbcTemplate.update(queryUpdate,
                     userEntity.getUsername(),
                     userEntity.getPassword(),
+                    userEntity.getStatus().toString(),
                     userEntity.getId());
 //            deleteById(userEntity.getId());
         }
@@ -57,7 +59,7 @@ public class UserRepository {
     public Optional<UserEntity> finByUsername(String username) {
         String querySelect = "SELECT * FROM user_table WHERE username = ?";
         List<UserEntity> results = jdbcTemplate.query(querySelect, rowMapper, username);
-        return results.isEmpty() ? Optional.empty() : Optional.of(results.get(0));
+        return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
     }
 
     public Optional<UserEntity> findById(long id) {
@@ -76,6 +78,6 @@ public class UserRepository {
                 UPDATE user_table SET status = ?
                 WHERE id = ?;
                 """;
-        jdbcTemplate.update(queryDelete, UserStatus.DELETED, id);
+        jdbcTemplate.update(queryDelete, UserStatus.DELETED.toString(), id);
     }
 }

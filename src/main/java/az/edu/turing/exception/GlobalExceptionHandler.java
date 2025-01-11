@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<GlobalErrorResponse> handleNotFoundException(NotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(GlobalErrorResponse.builder()
-                        .errorCode(ErrorCode.BAD_REQUEST)
+                        .errorCode(ErrorCode.NOT_FOUND)
                         .errorMessage(e.getMessage())
                         .timeStamp(LocalDateTime.now())
                         .requestId(UUID.randomUUID())
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<GlobalErrorResponse> handleAlreadyExistsException(AlreadyExistsException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(GlobalErrorResponse.builder()
-                        .errorCode(ErrorCode.BAD_REQUEST)
+                        .errorCode(ErrorCode.ALREADY_EXISTS)
                         .errorMessage(e.getMessage())
                         .timeStamp(LocalDateTime.now())
                         .requestId(UUID.randomUUID())
