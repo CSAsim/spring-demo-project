@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 @RequiredArgsConstructor
 @Repository
-public class UserRepository {
+public class JdbcTemplateUserRepository {
 
     public final JdbcTemplate jdbcTemplate;
     public final UserRowMapper rowMapper;

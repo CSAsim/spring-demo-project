@@ -1,7 +1,7 @@
 package az.edu.turing.service;
 
 import az.edu.turing.domain.entity.UserEntity;
-import az.edu.turing.domain.repository.UserRepository;
+import az.edu.turing.domain.repository.PostgresUserRepository;
 import az.edu.turing.exception.AlreadyExistsException;
 import az.edu.turing.exception.InvalidInputException;
 import az.edu.turing.exception.NotFoundException;
@@ -11,16 +11,18 @@ import az.edu.turing.model.dto.request.CreateUserRequest;
 import az.edu.turing.model.dto.request.UpdateUserRequest;
 import az.edu.turing.model.enums.UserStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Log4j2
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
+    private final PostgresUserRepository userRepository;
     private final UserMapper mapper;
     private final UserMapper userMapper;
 
@@ -43,7 +45,7 @@ public class UserService {
 
 
     public UserDto findByUsername(String username) {
-        return userRepository.finByUsername(username)
+        return userRepository.findByUsername(username)
                 .map(mapper::toDto)
                 .orElseThrow(() -> new NotFoundException("There is not user with username " + username));
     }
@@ -55,6 +57,7 @@ public class UserService {
         userEntity.setUsername(request.getUsername());
         userEntity.setPassword(request.getPassword());
         UserEntity savedUserEntity = userRepository.save(userEntity);
+        log.info("User updated: {}", savedUserEntity);
         return mapper.toDto(savedUserEntity);
     }
 
@@ -63,6 +66,7 @@ public class UserService {
                 .map(userEntity -> {
                     userEntity.setStatus(status);
                     UserEntity updatedUserEntity = userRepository.save(userEntity);
+                    log.info("User status updated to: {} for user: {}", status, updatedUserEntity);
                     return userMapper.toDto(updatedUserEntity);
                 })
                 .orElseThrow(() -> new NotFoundException("There is not user with id " + id));
@@ -70,7 +74,11 @@ public class UserService {
 
     public void deleteById(long id) {
         existsById(id);
-        userRepository.deleteById(id);
+        userRepository.findById(id)
+                .ifPresent(userEntity -> {
+                    userEntity.setStatus(UserStatus.DELETED);
+                    userRepository.save(userEntity);
+                });
     }
 
     private void existsById(long id) {

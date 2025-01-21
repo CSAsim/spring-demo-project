@@ -3,6 +3,7 @@ package az.edu.turing.mapper;
 import az.edu.turing.domain.entity.UserEntity;
 import az.edu.turing.model.dto.UserDto;
 import az.edu.turing.model.dto.request.CreateUserRequest;
+import az.edu.turing.model.dto.request.UpdateUserRequest;
 import az.edu.turing.model.enums.UserStatus;
 import org.springframework.stereotype.Component;
 
@@ -32,6 +33,13 @@ public class UserMapper {
                 .username(request.getUsername())
                 .password(request.getPassword())
                 .status(UserStatus.ACTIVATE)
+                .build();
+    }
+
+    public UserEntity toEntity(UpdateUserRequest request) {
+        return UserEntity.builder()
+                .username(request.getUsername())
+                .password(request.getPassword())
                 .build();
     }
 }
